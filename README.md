@@ -1,29 +1,55 @@
-# Arenix - Gaming Demand Forecasting & Analytics Platform
+# Arenix: AI Realtime Gaming Analytics
 
-Arenix is a Flask-based machine learning web application built to forecast gaming demand and analyze player activity trends. The project uses historical game data, Steam-related context, predictive modeling, and interactive dashboard pages to help understand demand patterns in the gaming market.
+Arenix is a Flask-based machine learning dashboard for forecasting Steam game demand using historical player activity, model evaluation, live Steam API context, and interactive dashboard views.
 
-## Project Overview
+The project is built as an end-to-end analytics product with data processing, model training, prediction APIs, dashboard pages, game comparison views, deployment configuration, and regression tests.
 
-The gaming industry changes quickly, with player interest shifting based on trends, releases, pricing, popularity, engagement, and player activity. Arenix focuses on using data analytics and machine learning to identify demand patterns and present useful insights through a clean web dashboard.
+## Live Demo
 
-This project combines data preprocessing, model training, prediction logic, visual analytics, model evaluation, and a Flask frontend into one end-to-end application.
+Not deployed yet. The project currently runs locally as a Flask application.
 
-## Key Features
+## Preview
 
-- Gaming demand forecasting using machine learning
-- Flask-based web dashboard
-- Steam data collection and snapshot scripts
-- Live training data preparation
-- Model training and validation workflow
-- Game catalog support
-- Demand comparison page
-- Dashboard and analytics pages
-- Model evaluation report
-- Saved trained ML model
-- Responsive HTML/CSS frontend
-- Dashboard screenshots included
-- Basic automated tests using Pytest
-- Deployment-ready files for Render
+### Application Screens
+
+| Home Page | Trend Board |
+|---|---|
+| ![Home Page](arenix_screenshot_01.png) | ![Trend Board](arenix_screenshot_02.png) |
+
+| Forecast Result | Prediction Details |
+|---|---|
+| ![Forecast Result](arenix_screenshot_03.png) | ![Prediction Details](arenix_screenshot_04.png) |
+
+| Demand Rankings | Compare Games |
+|---|---|
+| ![Demand Rankings](arenix_screenshot_05.png) | ![Compare Games](arenix_screenshot_06.png) |
+
+| Comparison Chart | Insights View |
+|---|---|
+| ![Comparison Chart](arenix_screenshot_07.png) | ![Insights View](arenix_screenshot_08.png) |
+
+| Full Analytics View |
+|---|
+| ![Full Analytics View](arenix_screenshot_09.png) |
+
+### Model and Dashboard Artifacts
+
+| Gaming Dashboard Preview | ML Evaluation Dashboard |
+|---|---|
+| ![Gaming Dashboard Preview](gaming_dashboard_updated.png) | ![ML Evaluation Dashboard](ml_evaluation_dashboard.png) |
+
+## Project Highlights
+
+- Forecasts next-period player demand for supported Steam games.
+- Uses historical monthly player activity for demand prediction.
+- Compares XGBoost against a lag-based baseline model.
+- Selects the best model using time-based validation.
+- Displays live Steam player counts when available.
+- Includes demand levels, trend labels, server risk, opportunity score, and business recommendations.
+- Provides home, dashboard, leaderboard, details, and game comparison views.
+- Handles unsupported games with clear error responses.
+- Includes deployment files for Render/Gunicorn.
+- Includes pytest-based regression tests.
 
 ## Tech Stack
 
@@ -31,275 +57,225 @@ This project combines data preprocessing, model training, prediction logic, visu
 - Flask
 - Pandas
 - Scikit-learn
+- XGBoost
+- Requests
 - HTML
 - CSS
+- JavaScript
+- Chart.js
 - Pytest
-- Render
-- Steam API / Steam data context
-- Machine Learning
-- Data Visualization
+- Gunicorn
 
-## Dashboard Preview
+## Dataset
 
-### Main Dashboard
+The included dataset is `model_data.csv`.
 
-![Gaming Dashboard](gaming_dashboard_updated.png)
+- Historical range: `2016-08-01` to `2021-09-01`
+- Granularity: Monthly
+- Target column: `players`
+- Main features: `year`, `month`, `event_flag`, `game_encoded`, `lag_1`, `lag_7`, `rolling_7`
 
-### ML Evaluation Dashboard
+Because the bundled historical data ends in September 2021, the model forecasts the next period after the latest available historical row. Live Steam player counts are displayed separately as real-time context.
 
-![ML Evaluation Dashboard](ml_evaluation_dashboard.png)
+## Model Approach
 
-## Application Screenshots
+The training pipeline compares XGBoost Regressor with a Lag-1 baseline model.
 
-### Screenshot 1
+The model is selected using a time-based validation split, which is more realistic for forecasting than random splitting because future data is not mixed into training data.
 
-![Arenix Screenshot 1](arenix_screenshot_01.png)
+The training report is saved in `model/training_report.json`.
 
-### Screenshot 2
+The selected trained model is saved in `model/final_demand_model.pkl`.
 
-![Arenix Screenshot 2](arenix_screenshot_02.png)
+## Main Features
 
-### Screenshot 3
+### Demand Forecasting
 
-![Arenix Screenshot 3](arenix_screenshot_03.png)
+The app predicts the next-period player count for supported games and returns predicted players, demand level, forecast date, model source, confidence level, trend direction, and recommendation.
 
-### Screenshot 4
+### Live Steam Context
 
-![Arenix Screenshot 4](arenix_screenshot_04.png)
+The app uses the Steam API to show live player counts when available. If the live API fails or is unavailable, the app falls back to the latest historical player count.
 
-### Screenshot 5
+### Trend Board Dashboard
 
-![Arenix Screenshot 5](arenix_screenshot_05.png)
+The dashboard shows tracked games, top forecast, high-demand games, game rankings, demand filters, selected game details, and operational recommendations.
 
-### Screenshot 6
+### Game Comparison
 
-![Arenix Screenshot 6](arenix_screenshot_06.png)
+The comparison page allows multiple games to be compared using historical data and forecasted demand.
 
-### Screenshot 7
+### Model Evaluation
 
-![Arenix Screenshot 7](arenix_screenshot_07.png)
+The project includes model validation, candidate comparison, selected-model reporting, and saved training metadata.
 
-### Screenshot 8
+### Daily Retraining Pipeline
 
-![Arenix Screenshot 8](arenix_screenshot_08.png)
+The project includes scripts to collect Steam snapshots, build updated training data, and retrain the model.
 
-### Screenshot 9
+Pipeline flow:
 
-![Arenix Screenshot 9](arenix_screenshot_09.png)
+```text
+Collect Steam player snapshots
+        ↓
+Save daily snapshot data
+        ↓
+Build updated model-ready data
+        ↓
+Retrain the demand model
+        ↓
+Save updated model and training report
+```
 
 ## Project Structure
 
 ```text
-Arenix/
-├── app.py
-├── demand_model.py
-├── train_model.py
-├── validate_model_report.py
-├── build_live_training_data.py
-├── collect_steam_snapshots.py
-├── run_daily_pipeline.py
-├── game_catalog.py
-├── model_data.csv
-├── gaming_dashboard_updated.png
-├── ml_evaluation_dashboard.png
-├── requirements.txt
-├── Procfile
-├── render.yaml
-├── runtime.txt
-├── pytest.ini
-├── README.md
-│
-├── model/
-│   ├── final_demand_model.pkl
-│   └── training_report.json
-│
-├── static/
-│   └── style.css
-│
-├── templates/
-│   ├── home.html
-│   ├── dashboard.html
-│   └── compare.html
-│
-├── tests/
-│   ├── test_app.py
-│   └── test_live_training_data.py
-│
-├── arenix_screenshot_01.png
-├── arenix_screenshot_02.png
-├── arenix_screenshot_03.png
-├── arenix_screenshot_04.png
-├── arenix_screenshot_05.png
-├── arenix_screenshot_06.png
-├── arenix_screenshot_07.png
-├── arenix_screenshot_08.png
-└── arenix_screenshot_09.png
+app.py                         Flask routes, APIs, prediction logic
+train_model.py                 Model training and validation
+demand_model.py                Baseline demand model
+game_catalog.py                Supported game names and Steam app IDs
+collect_steam_snapshots.py     Collects live Steam player snapshots
+build_live_training_data.py    Builds model-ready data from snapshots
+run_daily_pipeline.py          Runs the full daily pipeline
+validate_model_report.py       Validates model selection report
+model_data.csv                 Historical training dataset
+model/                         Saved model and training report
+templates/                     HTML pages
+static/                        CSS styling
+tests/                         Regression tests
+requirements.txt               Python dependencies
+Procfile                       Deployment process file
+render.yaml                    Render deployment configuration
+runtime.txt                    Python runtime version
+arenix_screenshot_01.png       Application screenshot
+arenix_screenshot_02.png       Application screenshot
+arenix_screenshot_03.png       Application screenshot
+arenix_screenshot_04.png       Application screenshot
+arenix_screenshot_05.png       Application screenshot
+arenix_screenshot_06.png       Application screenshot
+arenix_screenshot_07.png       Application screenshot
+arenix_screenshot_08.png       Application screenshot
+arenix_screenshot_09.png       Application screenshot
+gaming_dashboard_updated.png   Dashboard preview
+ml_evaluation_dashboard.png    ML evaluation dashboard
 ```
 
-## Main Files
+## Setup
 
-| File | Purpose |
-|---|---|
-| `app.py` | Main Flask application file |
-| `demand_model.py` | Demand prediction and model logic |
-| `train_model.py` | Script for training the ML model |
-| `validate_model_report.py` | Validates model performance report |
-| `build_live_training_data.py` | Prepares live-style training data |
-| `collect_steam_snapshots.py` | Collects Steam-related game snapshots |
-| `run_daily_pipeline.py` | Runs the data and model pipeline |
-| `game_catalog.py` | Stores or manages game catalog data |
-| `model_data.csv` | Dataset used for model training and analysis |
-| `gaming_dashboard_updated.png` | Dashboard preview image |
-| `ml_evaluation_dashboard.png` | ML evaluation dashboard image |
-| `requirements.txt` | Python dependencies |
-| `Procfile` | Deployment process file |
-| `render.yaml` | Render deployment configuration |
-| `runtime.txt` | Python runtime version |
-| `pytest.ini` | Pytest configuration |
-
-## Machine Learning Workflow
-
-The project follows an end-to-end ML workflow:
-
-1. Collect or prepare gaming-related data
-2. Clean and process the dataset
-3. Build live-style training data
-4. Train the demand forecasting model
-5. Save the final trained model
-6. Generate a training report
-7. Validate the model report
-8. Use the model inside the Flask dashboard
-9. Display predictions, comparisons, and insights through frontend pages
-
-## Web Application Pages
-
-The application includes multiple frontend pages:
-
-- `home.html` - Landing/home page for the application
-- `dashboard.html` - Main analytics dashboard
-- `compare.html` - Game comparison and demand insight page
-
-## Model Artifacts
-
-The trained model and report are stored in the `model/` folder:
-
-```text
-model/
-├── final_demand_model.pkl
-└── training_report.json
-```
-
-- `final_demand_model.pkl` stores the trained ML model.
-- `training_report.json` stores model training and evaluation results.
-
-## How To Run Locally
-
-1. Clone the repository:
+Clone the repository:
 
 ```bash
 git clone https://github.com/Sagnik0910/Arenix.git
 cd Arenix
 ```
 
-2. Install dependencies:
+Create and activate a virtual environment:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+Install dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-3. Run the Flask application:
+On macOS, XGBoost may require OpenMP:
+
+```bash
+brew install libomp
+```
+
+## Run the App
 
 ```bash
 python app.py
 ```
 
-4. Open the app in your browser:
+Open:
 
 ```text
-http://127.0.0.1:5000
+http://127.0.0.1:5002
 ```
 
-## Running The ML Pipeline
-
-To train or update the model, run:
-
-```bash
-python train_model.py
-```
-
-To build live training data:
-
-```bash
-python build_live_training_data.py
-```
-
-To collect Steam snapshots:
-
-```bash
-python collect_steam_snapshots.py
-```
-
-To run the daily pipeline:
-
-```bash
-python run_daily_pipeline.py
-```
-
-To validate the model report:
-
-```bash
-python validate_model_report.py
-```
-
-## Testing
-
-Run tests using:
+## Run Tests
 
 ```bash
 pytest
 ```
 
-The test files check core application behavior and live training data functionality.
+## Train the Model
 
-## Deployment
+```bash
+python train_model.py
+```
 
-The project includes deployment files for Render:
+To train using updated live snapshot data:
 
-- `Procfile`
-- `render.yaml`
-- `runtime.txt`
+```bash
+python train_model.py --data data/model_data_updated.csv
+```
 
-These files help deploy the Flask application as a web service.
+## Run Daily Pipeline
 
-## Business Use Case
+```bash
+python run_daily_pipeline.py
+```
 
-Arenix can be useful for:
+Useful commands:
 
-- Understanding gaming demand trends
-- Comparing player interest between games
-- Forecasting future demand
-- Supporting game market analysis
-- Building portfolio-level analytics dashboards
-- Demonstrating ML deployment with Flask
+```bash
+python collect_steam_snapshots.py
+python build_live_training_data.py
+python run_daily_pipeline.py --skip-collect
+```
+
+## API Routes
+
+```text
+/                         Home page
+/dashboard                Trend board dashboard
+/compare                  Game comparison page
+/predict/<game>           Prediction API for a game
+/dashboard-data           Dashboard ranking data
+/compare-games/<games>    Compare multiple games
+/recommended-games        Supported game list
+```
+
+## Example Use Cases
+
+- Gaming demand forecasting
+- Player activity trend monitoring
+- Game performance comparison
+- Server capacity planning
+- Promotion opportunity analysis
+- ML model evaluation practice
+- Dashboard development practice
+- End-to-end analytics product building
+
+## Current Limitations
+
+- The bundled historical dataset ends in September 2021.
+- Forecasts are based on the latest available historical row, not the current real-world month.
+- Live Steam player counts are used as context, not as the original historical training target.
+- Steam API calls may fail or be rate-limited.
+- Unsupported games return an error instead of fabricated predictions.
+- The app is not deployed publicly yet.
 
 ## Future Improvements
 
-- Add more real-time Steam API integrations
-- Improve model accuracy with larger datasets
-- Add user authentication
-- Add more interactive charts
-- Include advanced game comparison filters
-- Add SQL database support for historical tracking
-- Deploy the live dashboard publicly
-- Add API endpoints for predictions
-- Improve UI responsiveness across all screen sizes
+- Deploy the dashboard publicly.
+- Add more current historical data.
+- Add authentication for admin model retraining.
+- Add downloadable reports.
+- Improve frontend responsiveness.
+- Add more advanced time-series models.
+- Add CI testing with GitHub Actions.
 
 ## Author
 
-**Sagnik Guha**
+Sagnik Guha
 
 GitHub: [Sagnik0910](https://github.com/Sagnik0910)
-
-## License
-
-This project is created for learning, portfolio building, and data analytics practice.
