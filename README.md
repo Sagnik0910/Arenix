@@ -24,21 +24,20 @@ This project combines data preprocessing, model training, prediction logic, visu
 
 ## Tech Stack
 
-- **Python**
-- **Flask**
-- **Pandas**
-- **Scikit-learn**
-- **HTML**
-- **CSS**
-- **Pytest**
-- **Render**
-- **Steam API / Steam data context**
+- Python
+- Flask
+- Pandas
+- Scikit-learn
+- HTML
+- CSS
+- Pytest
+- Render
+- Steam API / Steam data context
 
 ## Project Structure
 
 ```text
 Arenix/
-│
 ├── app.py
 ├── demand_model.py
 ├── train_model.py
@@ -53,21 +52,89 @@ Arenix/
 ├── render.yaml
 ├── runtime.txt
 ├── pytest.ini
-│
 ├── model/
 │   ├── final_demand_model.pkl
 │   └── training_report.json
-│
 ├── static/
 │   └── style.css
-│
 ├── templates/
 │   ├── home.html
 │   ├── dashboard.html
 │   └── compare.html
-│
 ├── tests/
 │   ├── test_app.py
 │   └── test_live_training_data.py
-│
 └── arenix_screenshot_01.png ... arenix_screenshot_09.png
+Screenshots
+Home Page
+
+
+Dashboard View
+
+
+Analytics View
+
+
+Model & Insights
+
+
+Additional Screenshots
+
+
+
+
+
+
+
+
+
+
+How To Run Locally
+Clone the repository:
+git clone https://github.com/Sagnik0910/Arenix.git
+cd Arenix
+Install dependencies:
+pip install -r requirements.txt
+Run the Flask application:
+python app.py
+Open the app in your browser:
+http://127.0.0.1:5000
+Machine Learning Workflow
+The project follows a basic ML workflow:
+
+Collect or prepare gaming-related data
+Clean and process the dataset
+Train the demand forecasting model
+Save the final trained model
+Generate a training report
+Use the model inside the Flask dashboard
+Display predictions and insights through frontend pages
+Testing
+Run tests using:
+
+pytest
+The test files check core app behavior and live training data functionality.
+
+Deployment
+The project includes deployment files for Render:
+
+Procfile
+render.yaml
+runtime.txt
+These files help deploy the Flask application as a web service.
+
+Future Improvements
+Add more real-time Steam API integrations
+Improve model accuracy with larger datasets
+Add user authentication
+Add more interactive charts
+Include advanced game comparison filters
+Deploy the live dashboard publicly
+Add SQL-based data storage for historical tracking
+Author
+Sagnik Guha
+
+GitHub: Sagnik0910
+
+License
+This project is created for learning, portfolio building, and data analytics practice.
